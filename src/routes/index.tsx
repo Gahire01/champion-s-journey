@@ -1,24 +1,524 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import {
+  Flame, Trophy, Users, Star, Calendar, MapPin, Phone, Mail,
+  ArrowRight, Check, Heart, ShoppingBag, Play, Instagram, Facebook, Youtube,
+} from "lucide-react";
+import heroImg from "@/assets/hero-boxer.jpg";
+import glovesImg from "@/assets/gloves.jpg";
+import kidsImg from "@/assets/program-kids.jpg";
+import womenImg from "@/assets/program-women.jpg";
+import proImg from "@/assets/program-pro.jpg";
+import coach1 from "@/assets/coach-1.jpg";
+import coach2 from "@/assets/coach-2.jpg";
+import coach3 from "@/assets/coach-3.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
+export const Route = createFileRoute("/")({ component: Index });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function useCounter(target: number, duration = 1600) {
+  const [n, setN] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && !started.current) {
+          started.current = true;
+          const start = performance.now();
+          const tick = (t: number) => {
+            const p = Math.min(1, (t - start) / duration);
+            setN(Math.floor(target * (1 - Math.pow(1 - p, 3))));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [target, duration]);
+  return { n, ref };
+}
+
+function Stat({ value, suffix, label, icon: Icon }: { value: number; suffix?: string; label: string; icon: any }) {
+  const { n, ref } = useCounter(value);
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="group relative overflow-hidden border border-border bg-card p-8">
+      <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition-all group-hover:bg-primary/30" />
+      <Icon className="mb-4 h-6 w-6 text-[color:var(--gold)]" />
+      <div className="font-display text-5xl font-bold tracking-tight text-foreground">
+        <span ref={ref}>{n.toLocaleString()}</span>{suffix}
+      </div>
+      <div className="mt-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</div>
+    </div>
+  );
+}
+
+function Index() {
+  const navLinks = [
+    ["About", "#about"], ["Programs", "#programs"], ["Coaches", "#coaches"],
+    ["Schedule", "#schedule"], ["Membership", "#membership"], ["Shop", "#shop"], ["Contact", "#contact"],
+  ];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      {/* NAV */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <a href="#top" className="flex items-center gap-2">
+            <span className="grid h-8 w-8 place-items-center bg-primary font-display text-lg font-bold text-primary-foreground">A</span>
+            <span className="font-display text-lg tracking-wider">ALI <span className="text-[color:var(--gold)]">BOXING</span></span>
+          </a>
+          <nav className="hidden items-center gap-8 lg:flex">
+            {navLinks.map(([l, h]) => (
+              <a key={h} href={h} className="text-sm uppercase tracking-widest text-muted-foreground transition-colors hover:text-[color:var(--gold)]">{l}</a>
+            ))}
+          </nav>
+          <a href="#book" className="btn-fight btn-fight-hover text-sm">Join Now <ArrowRight className="h-4 w-4" /></a>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section id="top" className="relative min-h-screen overflow-hidden pt-16">
+        <div className="absolute inset-0">
+          <img src={heroImg} alt="Boxer training at ALI Boxing Club" width={1920} height={1280} className="h-full w-full object-cover object-[70%_center] opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+        </div>
+        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-2">
+          <div>
+            <div className="mb-6 inline-flex items-center gap-2 border border-[color:var(--gold)]/40 bg-[color:var(--gold)]/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">
+              <Flame className="h-3 w-3" /> Since 2014 · 120+ Medals
+            </div>
+            <h1 className="font-display text-6xl font-bold leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
+              Train Like<br />a <span className="text-gradient-gold">Champion</span>.
+            </h1>
+            <p className="mt-6 max-w-lg text-lg text-muted-foreground">
+              From your first jab to the world stage — ALI Boxing Club builds fighters. Kids, women, amateurs and pros welcome.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <a href="#book" className="btn-fight btn-fight-hover">🥊 Book a Free Class</a>
+              <a href="#membership" className="btn-ghost-gold btn-ghost-gold-hover">Become a Member</a>
+            </div>
+            <div className="mt-12 flex items-center gap-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="flex items-center gap-2"><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" /> 47 members training now</div>
+            </div>
+          </div>
+          <div className="relative hidden lg:block">
+            <div className="absolute -right-10 top-1/2 -translate-y-1/2 rotate-90 font-display text-[10rem] font-bold tracking-tighter text-white/[0.03]">FIGHT</div>
+          </div>
+        </div>
+      </section>
+
+      {/* MARQUEE */}
+      <div className="relative overflow-hidden border-y border-border bg-primary py-5">
+        <div className="animate-ticker flex whitespace-nowrap font-display text-2xl uppercase tracking-widest text-primary-foreground">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex shrink-0 items-center gap-8 px-4">
+              {["Discipline", "Power", "Speed", "Heart", "Precision", "Respect", "Grit", "Victory"].map((w) => (
+                <span key={w} className="flex items-center gap-8">
+                  {w} <span className="text-[color:var(--gold)]">✦</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ABOUT */}
+      <section id="about" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+          <div className="relative">
+            <img src={glovesImg} alt="Red boxing gloves" width={1200} height={900} loading="lazy" className="diag-slice h-[520px] w-full object-cover" />
+            <div className="absolute -bottom-6 -right-6 hidden border border-[color:var(--gold)] bg-background p-6 lg:block">
+              <div className="font-display text-5xl text-[color:var(--gold)]">10+</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Years of<br />Excellence</div>
+            </div>
+          </div>
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Our Story</div>
+            <h2 className="font-display text-5xl leading-tight sm:text-6xl">Where <span className="text-gradient-gold">Fighters</span><br /> Are Forged.</h2>
+            <p className="mt-6 text-muted-foreground">
+              Founded by former national champion coaches, ALI Boxing Club is more than a gym — it's a family of fighters, mentors, and community leaders committed to building character through the sweet science.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {[
+                ["Certified Coaches", "USA Boxing & IBA licensed staff"],
+                ["World-Class Ring", "Full-size competition ring & 12 heavy bags"],
+                ["Youth Development", "Scholarships for underserved kids"],
+                ["Proven Results", "3 national champions in 2025"],
+              ].map(([t, d]) => (
+                <div key={t} className="border-l-2 border-primary pl-4">
+                  <div className="font-display text-sm uppercase tracking-wider">{t}</div>
+                  <div className="mt-1 text-sm text-muted-foreground">{d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* STATS */}
+        <div className="mt-24 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <Stat value={1000} suffix="+" label="Active Members" icon={Users} />
+          <Stat value={120} suffix="+" label="Medals Won" icon={Trophy} />
+          <Stat value={18} label="Certified Coaches" icon={Star} />
+          <Stat value={10} suffix="+" label="Years of Excellence" icon={Flame} />
+        </div>
+      </section>
+
+      {/* PROGRAMS */}
+      <section id="programs" className="border-t border-border bg-card/30 py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Training Programs</div>
+              <h2 className="font-display text-5xl sm:text-6xl">Pick Your <span className="text-gradient-gold">Fight</span>.</h2>
+            </div>
+            <p className="max-w-md text-muted-foreground">Seven programs built for every level — from a 6-year-old's first jab to a pro's title camp.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { img: kidsImg, title: "Kids Boxing", age: "Ages 6–12", fee: "$79/mo", coach: "Coach Marcus", schedule: "Mon · Wed · Fri · 5PM" },
+              { img: womenImg, title: "Women's Boxing", age: "All Levels", fee: "$99/mo", coach: "Coach Elena", schedule: "Tue · Thu · Sat · 6PM" },
+              { img: proImg, title: "Professional", age: "By invitation", fee: "Custom", coach: "Coach Diego", schedule: "Daily · 7AM & 6PM" },
+              { img: kidsImg, title: "Youth Boxing", age: "Ages 13–17", fee: "$89/mo", coach: "Coach Marcus", schedule: "Mon · Wed · Fri · 6PM" },
+              { img: womenImg, title: "Boxing Fitness", age: "All Levels", fee: "$69/mo", coach: "Coach Elena", schedule: "Daily · 12PM" },
+              { img: proImg, title: "Amateur / Competition", age: "16+", fee: "$149/mo", coach: "Coach Diego", schedule: "Tue · Thu · Sat · 7PM" },
+            ].map((p) => (
+              <div key={p.title} className="group relative overflow-hidden border border-border bg-background transition-all hover:border-primary/60">
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  <img src={p.img} alt={p.title} width={1000} height={1200} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <div className="absolute right-4 top-4 border border-[color:var(--gold)]/60 bg-background/70 px-2 py-1 text-[10px] uppercase tracking-widest text-[color:var(--gold)] backdrop-blur">{p.age}</div>
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <h3 className="font-display text-3xl">{p.title}</h3>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase tracking-widest text-muted-foreground">
+                      <span>{p.coach}</span><span className="text-[color:var(--gold)]">{p.fee}</span>
+                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">{p.schedule}</div>
+                  </div>
+                </div>
+                <a href="#book" className="flex items-center justify-between border-t border-border px-6 py-4 text-xs uppercase tracking-widest transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  Book Class <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COACHES */}
+      <section id="coaches" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="mb-16 text-center">
+          <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Meet The Coaches</div>
+          <h2 className="font-display text-5xl sm:text-6xl">Cornermen. <span className="text-gradient-gold">Champions.</span></h2>
+        </div>
+        <div className="grid gap-8 md:grid-cols-3">
+          {[
+            { img: coach1, name: "Marcus 'Iron' Johnson", role: "Head Coach", years: "22 yrs", bio: "Former USA Boxing national coach, developed 8 Golden Gloves champions." },
+            { img: coach2, name: "Diego Ramirez", role: "Pro & Amateur Lead", years: "18 yrs", bio: "Ex-WBC ranked lightweight, corner for 3 world title fights." },
+            { img: coach3, name: "Elena Vasquez", role: "Women's & Fitness", role2: "", years: "12 yrs", bio: "IBA certified, national silver medalist, mother of two fighters." },
+          ].map((c) => (
+            <div key={c.name} className="group relative overflow-hidden border border-border bg-card">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <img src={c.img} alt={c.name} width={800} height={1000} loading="lazy" className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-display text-2xl">{c.name}</h3>
+                    <div className="mt-1 text-xs uppercase tracking-widest text-[color:var(--gold)]">{c.role}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-display text-2xl">{c.years}</div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">experience</div>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">{c.bio}</p>
+                <a href="#book" className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[color:var(--gold)] hover:underline">
+                  Book with this coach <ArrowRight className="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SCHEDULE */}
+      <section id="schedule" className="border-y border-border bg-card/30 py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Weekly Schedule</div>
+              <h2 className="font-display text-5xl sm:text-6xl">This Week's <span className="text-gradient-gold">Rounds</span>.</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["All", "Kids", "Adults", "Women", "Elite", "Fitness"].map((f, i) => (
+                <button key={f} className={`border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${i === 0 ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]"}`}>{f}</button>
+              ))}
+            </div>
+          </div>
+          <div className="overflow-x-auto border border-border">
+            <table className="w-full min-w-[720px] text-sm">
+              <thead>
+                <tr className="border-b border-border bg-background">
+                  {["Time", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((h) => (
+                    <th key={h} className="p-4 text-left font-display text-xs uppercase tracking-widest text-muted-foreground">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["7:00 AM", "Pro Camp", "Fitness", "Pro Camp", "Fitness", "Pro Camp", "Open Gym"],
+                  ["12:00 PM", "Fitness", "Fitness", "Fitness", "Fitness", "Fitness", "Fitness"],
+                  ["5:00 PM", "Kids", "Youth", "Kids", "Youth", "Kids", "Kids"],
+                  ["6:00 PM", "Youth", "Women", "Youth", "Women", "Youth", "Women"],
+                  ["7:00 PM", "Amateur", "Amateur", "Amateur", "Amateur", "Sparring", "Sparring"],
+                ].map((row, ri) => (
+                  <tr key={ri} className="border-b border-border last:border-0 hover:bg-primary/5">
+                    {row.map((cell, ci) => (
+                      <td key={ci} className={`p-4 ${ci === 0 ? "font-display text-[color:var(--gold)]" : "text-muted-foreground"}`}>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* MEMBERSHIP */}
+      <section id="membership" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="mb-16 text-center">
+          <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Membership</div>
+          <h2 className="font-display text-5xl sm:text-6xl">Choose Your <span className="text-gradient-gold">Weight Class</span>.</h2>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-3">
+          {[
+            { name: "Beginner", price: 79, tag: "Get Started", features: ["3 sessions per week", "Group classes", "Gym access", "Beginner curriculum"] },
+            { name: "Warrior", price: 129, tag: "Most Popular", featured: true, features: ["Unlimited training", "All group classes", "Sparring nights", "Progress tracking", "Guest passes (2/mo)"] },
+            { name: "Champion", price: 249, tag: "Elite", features: ["Everything in Warrior", "Personal head coach", "Nutrition plan", "Competition prep", "Video film review", "Priority ring time"] },
+          ].map((p) => (
+            <div key={p.name} className={`relative border p-8 ${p.featured ? "border-[color:var(--gold)] bg-gradient-to-b from-primary/10 to-transparent" : "border-border bg-card"}`}>
+              {p.featured && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[color:var(--gold)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-background">Most Popular</div>
+              )}
+              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{p.tag}</div>
+              <h3 className="mt-2 font-display text-4xl">{p.name}</h3>
+              <div className="mt-6 flex items-baseline gap-1">
+                <span className="font-display text-6xl">${p.price}</span>
+                <span className="text-sm text-muted-foreground">/month</span>
+              </div>
+              <ul className="mt-8 space-y-3">
+                {p.features.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--gold)]" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <a href="#book" className={`mt-8 block w-full text-center ${p.featured ? "btn-fight btn-fight-hover" : "btn-ghost-gold btn-ghost-gold-hover"}`}>
+                Choose {p.name}
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* EVENT + DONATE */}
+      <section className="border-y border-border bg-gradient-to-br from-primary/20 via-background to-background py-32">
+        <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2">
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Next Event</div>
+            <h2 className="font-display text-5xl sm:text-6xl">Fight Night <span className="text-gradient-gold">XII</span></h2>
+            <p className="mt-4 text-muted-foreground">March 22 · 7:00 PM · ALI Arena — 8 amateur bouts, live music, food trucks.</p>
+            <Countdown targetDays={38} />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#book" className="btn-fight btn-fight-hover">🎟 Reserve Tickets</a>
+              <a href="#contact" className="btn-ghost-gold btn-ghost-gold-hover"><MapPin className="h-4 w-4" /> Directions</a>
+            </div>
+          </div>
+          <div className="border border-[color:var(--gold)]/30 bg-card p-8">
+            <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">
+              <Heart className="h-4 w-4" /> — Support the Next Champion
+            </div>
+            <h3 className="font-display text-3xl">Donate to Youth Scholarships</h3>
+            <p className="mt-3 text-sm text-muted-foreground">100% of donations fund equipment, competition travel, and free training for underserved kids.</p>
+            <div className="mt-6">
+              <div className="mb-2 flex justify-between text-xs uppercase tracking-widest text-muted-foreground">
+                <span>Raised: $18,420</span><span>Goal: $25,000</span>
+              </div>
+              <div className="h-2 overflow-hidden bg-secondary">
+                <div className="h-full bg-gradient-to-r from-primary to-[color:var(--gold)]" style={{ width: "73%" }} />
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {[25, 50, 100, 250].map((v) => (
+                <button key={v} className="border border-border bg-background px-4 py-3 font-display text-lg transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]">${v}</button>
+              ))}
+              <button className="btn-fight btn-fight-hover"><Heart className="h-4 w-4" /> Donate</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOP */}
+      <section id="shop" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Shop</div>
+            <h2 className="font-display text-5xl sm:text-6xl">Gear Up.</h2>
+          </div>
+          <a href="#" className="text-xs uppercase tracking-widest text-[color:var(--gold)] hover:underline">View all →</a>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { name: "ALI Signature Gloves", price: 129, img: glovesImg },
+            { name: "Hand Wraps (Pair)", price: 19, img: kidsImg },
+            { name: "Club Hoodie", price: 65, img: coach1 },
+            { name: "Training Shorts", price: 49, img: proImg },
+          ].map((p) => (
+            <div key={p.name} className="group cursor-pointer">
+              <div className="relative aspect-square overflow-hidden border border-border bg-card">
+                <img src={p.img} alt={p.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <button className="absolute inset-x-4 bottom-4 translate-y-4 border border-[color:var(--gold)] bg-background/80 py-2 text-xs uppercase tracking-widest text-[color:var(--gold)] opacity-0 backdrop-blur transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                  <ShoppingBag className="mr-2 inline h-3 w-3" /> Add to Cart
+                </button>
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-sm">{p.name}</span>
+                <span className="font-display text-[color:var(--gold)]">${p.price}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="border-t border-border bg-card/30 py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16">
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Voices from the Ring</div>
+            <h2 className="font-display text-5xl sm:text-6xl">What Our <span className="text-gradient-gold">Fighters</span> Say.</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { q: "My son walked in shy, walked out a Golden Gloves finalist. Coach Marcus is the real deal.", n: "Angela P.", r: "Parent" },
+              { q: "Best gym in the city. The energy, the coaching, the community — nothing compares.", n: "David K.", r: "Amateur, 3-1" },
+              { q: "Elena's women's class rebuilt my confidence more than any therapist ever did.", n: "Sara M.", r: "Member since 2022" },
+            ].map((t, i) => (
+              <div key={i} className="border border-border bg-background p-8">
+                <div className="mb-4 flex text-[color:var(--gold)]">{"★★★★★".split("").map((s, i) => <span key={i}>{s}</span>)}</div>
+                <p className="text-muted-foreground">"{t.q}"</p>
+                <div className="mt-6 border-t border-border pt-4">
+                  <div className="font-display text-sm uppercase tracking-wider">{t.n}</div>
+                  <div className="text-xs text-muted-foreground">{t.r}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BOOK + CONTACT */}
+      <section id="book" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="grid gap-16 lg:grid-cols-2">
+          <div id="contact">
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Book / Contact</div>
+            <h2 className="font-display text-5xl sm:text-6xl">Step In The <span className="text-gradient-gold">Ring</span>.</h2>
+            <p className="mt-4 text-muted-foreground">Book your free first class or drop us a line. We answer within 24 hours.</p>
+            <div className="mt-10 space-y-5 text-sm">
+              <div className="flex items-center gap-4"><MapPin className="h-5 w-5 text-[color:var(--gold)]" /> 1420 Champion Way, Boston, MA 02118</div>
+              <div className="flex items-center gap-4"><Phone className="h-5 w-5 text-[color:var(--gold)]" /> (617) 555-JABS</div>
+              <div className="flex items-center gap-4"><Mail className="h-5 w-5 text-[color:var(--gold)]" /> hello@aliboxingclub.com</div>
+              <div className="flex items-center gap-4"><Calendar className="h-5 w-5 text-[color:var(--gold)]" /> Mon–Sat · 6AM – 10PM</div>
+            </div>
+            <div className="mt-8 flex gap-3">
+              {[Instagram, Facebook, Youtube].map((I, i) => (
+                <a key={i} href="#" className="grid h-10 w-10 place-items-center border border-border transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]"><I className="h-4 w-4" /></a>
+              ))}
+            </div>
+          </div>
+          <form className="border border-border bg-card p-8" onSubmit={(e) => e.preventDefault()}>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input placeholder="Full name" className="border border-input bg-background px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[color:var(--gold)]" />
+              <input placeholder="Email" type="email" className="border border-input bg-background px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[color:var(--gold)]" />
+            </div>
+            <select className="mt-4 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus:border-[color:var(--gold)]">
+              <option>Program of interest…</option>
+              <option>Kids Boxing</option><option>Youth Boxing</option><option>Women's Boxing</option>
+              <option>Amateur / Competition</option><option>Boxing Fitness</option><option>Private Coaching</option>
+            </select>
+            <input type="date" className="mt-4 w-full border border-input bg-background px-4 py-3 text-sm outline-none focus:border-[color:var(--gold)]" />
+            <textarea placeholder="Tell us your goals…" rows={4} className="mt-4 w-full border border-input bg-background px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[color:var(--gold)]" />
+            <button type="submit" className="btn-fight btn-fight-hover mt-6 w-full">Book My Free Class <ArrowRight className="h-4 w-4" /></button>
+            <p className="mt-3 text-center text-xs text-muted-foreground">No card required · 60-minute session</p>
+          </form>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-border bg-card">
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-4">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2">
+              <span className="grid h-8 w-8 place-items-center bg-primary font-display text-lg font-bold text-primary-foreground">A</span>
+              <span className="font-display text-lg tracking-wider">ALI <span className="text-[color:var(--gold)]">BOXING</span></span>
+            </div>
+            <p className="mt-4 max-w-sm text-sm text-muted-foreground">Building champions inside and outside the ring since 2014.</p>
+          </div>
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">Train</div>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#programs" className="hover:text-foreground">Programs</a></li>
+              <li><a href="#schedule" className="hover:text-foreground">Schedule</a></li>
+              <li><a href="#membership" className="hover:text-foreground">Membership</a></li>
+              <li><a href="#book" className="hover:text-foreground">Book a class</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">Club</div>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#about" className="hover:text-foreground">About</a></li>
+              <li><a href="#coaches" className="hover:text-foreground">Coaches</a></li>
+              <li><a href="#shop" className="hover:text-foreground">Shop</a></li>
+              <li><a href="#contact" className="hover:text-foreground">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-muted-foreground">
+            <div>© {new Date().getFullYear()} ALI Boxing Club. All rights reserved.</div>
+            <div>Train hard. Fight smart. Live proud.</div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function Countdown({ targetDays }: { targetDays: number }) {
+  const [target] = useState(() => Date.now() + targetDays * 86400000);
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const diff = Math.max(0, target - now);
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff / 3600000) % 24);
+  const m = Math.floor((diff / 60000) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+  return (
+    <div className="mt-8 grid grid-cols-4 gap-3">
+      {[["Days", d], ["Hours", h], ["Min", m], ["Sec", s]].map(([l, v]) => (
+        <div key={l} className="border border-border bg-background/50 p-4 text-center backdrop-blur">
+          <div className="font-display text-4xl text-[color:var(--gold)] tabular-nums">{String(v).padStart(2, "0")}</div>
+          <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{l}</div>
+        </div>
+      ))}
     </div>
   );
 }
