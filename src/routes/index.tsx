@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Flame, Trophy, Users, Star, Calendar, MapPin, Phone, Mail,
   ArrowRight, Check, Heart, ShoppingBag, Play, Instagram, Facebook, Youtube,
+  MessageCircle, Image as ImageIcon, Video as VideoIcon, Quote, Send,
 } from "lucide-react";
 import heroImg from "@/assets/hero-boxer.jpg";
 import glovesImg from "@/assets/gloves.jpg";
@@ -12,8 +13,35 @@ import proImg from "@/assets/program-pro.jpg";
 import coach1 from "@/assets/coach-1.jpg";
 import coach2 from "@/assets/coach-2.jpg";
 import coach3 from "@/assets/coach-3.jpg";
+import logoImg from "@/assets/ali-logo.png";
+
+// TODO: replace with real WhatsApp number in international format (no + or spaces), e.g. "14155551234"
+const WHATSAPP_NUMBER = "0000000000";
+const waLink = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 export const Route = createFileRoute("/")({ component: Index });
+
+// Scroll reveal — adds .is-visible when the element enters the viewport
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 
 function useCounter(target: number, duration = 1600) {
   const [n, setN] = useState(0);
@@ -57,9 +85,11 @@ function Stat({ value, suffix, label, icon: Icon }: { value: number; suffix?: st
 }
 
 function Index() {
+  useReveal();
   const navLinks = [
     ["About", "#about"], ["Programs", "#programs"], ["Coaches", "#coaches"],
-    ["Schedule", "#schedule"], ["Membership", "#membership"], ["Shop", "#shop"], ["Contact", "#contact"],
+    ["Stories", "#stories"], ["Gallery", "#gallery"],
+    ["Schedule", "#schedule"], ["Membership", "#membership"], ["Apply", "#apply"], ["Contact", "#contact"],
   ];
 
   return (
@@ -67,28 +97,37 @@ function Index() {
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <a href="#top" className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center bg-primary font-display text-lg font-bold text-primary-foreground">A</span>
+          <a href="#top" className="flex items-center gap-3">
+            <img src={logoImg} alt="ALI Boxing Club logo" width={40} height={40} className="h-10 w-10 object-contain drop-shadow-[0_2px_8px_rgba(220,38,38,0.4)]" />
             <span className="font-display text-lg tracking-wider">ALI <span className="text-[color:var(--gold)]">BOXING</span></span>
           </a>
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav className="hidden items-center gap-6 lg:flex">
             {navLinks.map(([l, h]) => (
-              <a key={h} href={h} className="text-sm uppercase tracking-widest text-muted-foreground transition-colors hover:text-[color:var(--gold)]">{l}</a>
+              <a key={h} href={h} className="text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-[color:var(--gold)]">{l}</a>
             ))}
           </nav>
-          <a href="#book" className="btn-fight btn-fight-hover text-sm">Join Now <ArrowRight className="h-4 w-4" /></a>
+          <a href="#apply" className="btn-fight btn-fight-hover text-sm">Join Now <ArrowRight className="h-4 w-4" /></a>
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO — with video placeholder */}
       <section id="top" className="relative min-h-screen overflow-hidden pt-16">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Boxer training at ALI Boxing Club" width={1920} height={1280} className="h-full w-full object-cover object-[70%_center] opacity-60" />
+          {/* Video placeholder — drop your training/fight reel at /hero.mp4 (public/) or update src */}
+          <video
+            className="h-full w-full object-cover opacity-60 animate-kenburns"
+            autoPlay muted loop playsInline
+            poster={heroImg}
+          >
+            {/* <source src="/hero.mp4" type="video/mp4" /> */}
+          </video>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+          {/* Faint punching bag silhouette placeholder */}
+          <div className="pointer-events-none absolute right-6 top-1/3 hidden h-64 w-24 animate-float-slow rounded-b-full bg-gradient-to-b from-primary/20 to-transparent blur-md lg:block" />
         </div>
         <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-2">
-          <div>
+          <div className="animate-reveal-up">
             <div className="mb-6 inline-flex items-center gap-2 border border-[color:var(--gold)]/40 bg-[color:var(--gold)]/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">
               <Flame className="h-3 w-3" /> Since 2014 · 120+ Medals
             </div>
@@ -99,8 +138,10 @@ function Index() {
               From your first jab to the world stage — ALI Boxing Club builds fighters. Kids, women, amateurs and pros welcome.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <a href="#book" className="btn-fight btn-fight-hover">🥊 Book a Free Class</a>
-              <a href="#membership" className="btn-ghost-gold btn-ghost-gold-hover">Become a Member</a>
+              <a href="#apply" className="btn-fight btn-fight-hover animate-glow-pulse">🥊 Join Now</a>
+              <a href="#book" className="btn-ghost-gold btn-ghost-gold-hover">📅 Book a Free Class</a>
+              <a href="#donate" className="btn-ghost-gold btn-ghost-gold-hover"><Heart className="h-4 w-4" /> Donate</a>
+              <a href="#membership" className="btn-ghost-gold btn-ghost-gold-hover"><Trophy className="h-4 w-4" /> Become a Member</a>
             </div>
             <div className="mt-12 flex items-center gap-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
               <div className="flex items-center gap-2"><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" /> 47 members training now</div>
@@ -108,9 +149,12 @@ function Index() {
           </div>
           <div className="relative hidden lg:block">
             <div className="absolute -right-10 top-1/2 -translate-y-1/2 rotate-90 font-display text-[10rem] font-bold tracking-tighter text-white/[0.03]">FIGHT</div>
+            {/* Floating logo mark */}
+            <img src={logoImg} alt="" aria-hidden className="mx-auto h-72 w-72 animate-float-slow object-contain opacity-90 drop-shadow-[0_20px_60px_rgba(220,38,38,0.35)]" />
           </div>
         </div>
       </section>
+
 
       {/* MARQUEE */}
       <div className="relative overflow-hidden border-y border-border bg-primary py-5">
@@ -247,7 +291,66 @@ function Index() {
         </div>
       </section>
 
+      {/* CHAMPION / BACKGROUND STORIES */}
+      <section id="stories" className="relative overflow-hidden border-t border-border bg-gradient-to-b from-background via-card/30 to-background py-32">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]">
+          <div className="absolute -left-20 top-10 font-display text-[22rem] leading-none tracking-tighter">GRIT</div>
+          <div className="absolute -right-10 bottom-0 font-display text-[18rem] leading-none tracking-tighter text-[color:var(--gold)]">GLORY</div>
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="reveal mb-16 max-w-3xl">
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Champion Stories</div>
+            <h2 className="font-display text-5xl sm:text-6xl">From <span className="text-gradient-gold">Nothing</span> to the Ring.</h2>
+            <p className="mt-4 text-muted-foreground">
+              Every belt starts with a background story. These are the fighters who walked through our doors — and walked out champions.
+            </p>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { name: "Amir 'The Storm' Khan", from: "Street kid, age 11", to: "Junior National Gold 2024", years: "6 yrs at ALI",
+                quote: "I had nothing but anger. Coach turned it into a jab. Now I'm ranked #1 in my weight class.", img: proImg },
+              { name: "Layla Ahmed", from: "Single mom, office worker", to: "State Champion 2025", years: "3 yrs at ALI",
+                quote: "Women's boxing gave me back my body and my confidence. I fight for every woman who ever felt small.", img: womenImg },
+              { name: "Marco 'Kid' Diaz", from: "Bullied at school, age 8", to: "Silver Gloves finalist", years: "4 yrs at ALI",
+                quote: "The bullies stopped after month one. Not because I fought — because I stopped being afraid.", img: kidsImg },
+              { name: "Jamal 'Bomber' Reid", from: "Warehouse worker", to: "Pro debut 4-0 KO", years: "5 yrs at ALI",
+                quote: "I was sparring on lunch breaks. Now I'm on Friday night cards. This gym is my second family.", img: coach1 },
+              { name: "Priya Nair", from: "College student", to: "Regional Amateur Champion", years: "2 yrs at ALI",
+                quote: "Elena believed in me before I did. That's the ALI difference — they see the fighter first.", img: coach3 },
+              { name: "Big Tony", from: "Recovering, age 45", to: "Masters Division Bronze", years: "3 yrs at ALI",
+                quote: "Boxing saved my life. Literally. The bag doesn't judge — it just makes you honest.", img: coach2 },
+            ].map((s, i) => (
+              <article
+                key={s.name}
+                className="reveal group relative flex flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-[color:var(--gold)]/60 hover:shadow-[0_20px_60px_-20px_var(--blood)]"
+                style={{ transitionDelay: `${i * 60}ms` }}
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={s.img} alt={s.name} loading="lazy" className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                  <div className="absolute left-4 top-4 border border-[color:var(--gold)]/60 bg-background/70 px-2 py-1 text-[10px] uppercase tracking-widest text-[color:var(--gold)] backdrop-blur">{s.years}</div>
+                  <Quote className="absolute right-4 top-4 h-6 w-6 text-[color:var(--gold)]/60" />
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="font-display text-2xl">{s.name}</h3>
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-widest">
+                    <span className="text-muted-foreground">{s.from}</span>
+                    <ArrowRight className="h-3 w-3 text-[color:var(--gold)]" />
+                    <span className="text-[color:var(--gold)]">{s.to}</span>
+                  </div>
+                  <p className="mt-4 flex-1 text-sm italic text-muted-foreground">"{s.quote}"</p>
+                  <a href="#apply" className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[color:var(--gold)] transition-transform hover:translate-x-1">
+                    Write your story <ArrowRight className="h-3 w-3" />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SCHEDULE */}
+
       <section id="schedule" className="border-y border-border bg-card/30 py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
@@ -328,7 +431,8 @@ function Index() {
       </section>
 
       {/* EVENT + DONATE */}
-      <section className="border-y border-border bg-gradient-to-br from-primary/20 via-background to-background py-32">
+      <section id="donate" className="border-y border-border bg-gradient-to-br from-primary/20 via-background to-background py-32">
+
         <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2">
           <div>
             <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Next Event</div>
@@ -356,10 +460,20 @@ function Index() {
             </div>
             <div className="mt-6 flex flex-wrap gap-2">
               {[25, 50, 100, 250].map((v) => (
-                <button key={v} className="border border-border bg-background px-4 py-3 font-display text-lg transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]">${v}</button>
+                <a
+                  key={v}
+                  href={waLink(`Hi ALI Boxing Club — I'd like to donate $${v} to youth scholarships. Please share payment details.`)}
+                  target="_blank" rel="noreferrer"
+                  className="border border-border bg-background px-4 py-3 font-display text-lg transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]"
+                >${v}</a>
               ))}
-              <button className="btn-fight btn-fight-hover"><Heart className="h-4 w-4" /> Donate</button>
+              <a
+                href={waLink("Hi ALI Boxing Club — I want to donate to the youth scholarship fund. What are the ways to give?")}
+                target="_blank" rel="noreferrer"
+                className="btn-fight btn-fight-hover"
+              ><Heart className="h-4 w-4" /> Donate via WhatsApp</a>
             </div>
+
           </div>
         </div>
       </section>
@@ -396,7 +510,11 @@ function Index() {
         </div>
       </section>
 
+      {/* GALLERY — 200 image placeholders + 12 video placeholders */}
+      <Gallery />
+
       {/* TESTIMONIALS */}
+
       <section className="border-t border-border bg-card/30 py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16">
@@ -422,7 +540,11 @@ function Index() {
         </div>
       </section>
 
+      {/* APPLY — sends via WhatsApp */}
+      <ApplyWhatsApp />
+
       {/* BOOK + CONTACT */}
+
       <section id="book" className="mx-auto max-w-7xl px-6 py-32">
         <div className="grid gap-16 lg:grid-cols-2">
           <div id="contact">
@@ -522,3 +644,191 @@ function Countdown({ targetDays }: { targetDays: number }) {
     </div>
   );
 }
+
+/* -------------------- GALLERY -------------------- */
+function Gallery() {
+  const [tab, setTab] = useState<"photos" | "videos">("photos");
+  const [visible, setVisible] = useState(40);
+  const photos = Array.from({ length: 200 }, (_, i) => i + 1);
+  const videos = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  // Rotating gradient palette so 200 placeholders don't look identical
+  const palette = [
+    "from-primary/40 via-background to-[color:var(--gold)]/20",
+    "from-[color:var(--gold)]/30 via-background to-primary/30",
+    "from-primary/50 via-background to-background",
+    "from-background via-primary/20 to-[color:var(--gold)]/30",
+    "from-[color:var(--gold)]/20 via-card to-primary/40",
+    "from-primary/30 via-card to-background",
+  ];
+
+  return (
+    <section id="gallery" className="border-t border-border bg-background py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Gallery</div>
+            <h2 className="font-display text-5xl sm:text-6xl">Inside The <span className="text-gradient-gold">Gym</span>.</h2>
+            <p className="mt-3 max-w-lg text-muted-foreground">
+              200 fight moments · 12 highlight reels. Placeholders — swap them with your real photos & videos.
+            </p>
+          </div>
+          <div className="inline-flex border border-border">
+            <button
+              onClick={() => setTab("photos")}
+              className={`flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-widest transition-colors ${tab === "photos" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-[color:var(--gold)]"}`}
+            >
+              <ImageIcon className="h-4 w-4" /> Photos · 200
+            </button>
+            <button
+              onClick={() => setTab("videos")}
+              className={`flex items-center gap-2 border-l border-border px-5 py-2 text-xs uppercase tracking-widest transition-colors ${tab === "videos" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-[color:var(--gold)]"}`}
+            >
+              <VideoIcon className="h-4 w-4" /> Videos · 12
+            </button>
+          </div>
+        </div>
+
+        {tab === "photos" ? (
+          <>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {photos.slice(0, visible).map((n) => (
+                <figure
+                  key={n}
+                  className={`reveal group relative aspect-square overflow-hidden border border-border bg-gradient-to-br ${palette[n % palette.length]}`}
+                  style={{ transitionDelay: `${(n % 12) * 40}ms` }}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-60 transition-opacity group-hover:opacity-100">
+                    <ImageIcon className="h-6 w-6 text-[color:var(--gold)]/70" />
+                    <span className="mt-2 font-display text-xs uppercase tracking-widest text-muted-foreground">Photo {String(n).padStart(3, "0")}</span>
+                  </div>
+                  <div className="absolute inset-0 translate-y-full bg-background/70 backdrop-blur-sm transition-transform duration-300 group-hover:translate-y-0" />
+                  <div className="absolute inset-0 flex items-end justify-between p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="font-display text-lg text-[color:var(--gold)]">#{String(n).padStart(3, "0")}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Replace me</span>
+                  </div>
+                </figure>
+              ))}
+            </div>
+            {visible < photos.length && (
+              <div className="mt-10 text-center">
+                <button
+                  onClick={() => setVisible((v) => Math.min(v + 40, photos.length))}
+                  className="btn-ghost-gold btn-ghost-gold-hover"
+                >
+                  Load more ({photos.length - visible} left)
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {videos.map((n) => (
+              <figure
+                key={n}
+                className="reveal group relative aspect-video overflow-hidden border border-border bg-gradient-to-br from-primary/30 via-background to-[color:var(--gold)]/20"
+                style={{ transitionDelay: `${n * 60}ms` }}
+              >
+                <div className="absolute inset-0 shimmer-bg opacity-40" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="grid h-16 w-16 place-items-center rounded-full border border-[color:var(--gold)] bg-background/70 backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:border-primary">
+                    <Play className="h-6 w-6 translate-x-0.5 text-[color:var(--gold)] transition-colors group-hover:text-primary-foreground" />
+                  </div>
+                  <span className="mt-4 font-display text-lg uppercase tracking-widest">Video {String(n).padStart(2, "0")}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Drop your MP4 here</span>
+                </div>
+              </figure>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------- APPLY VIA WHATSAPP -------------------- */
+function ApplyWhatsApp() {
+  const [form, setForm] = useState({
+    name: "", age: "", phone: "", program: "Kids Boxing", experience: "Beginner", goal: "",
+  });
+
+  const buildMsg = () =>
+    `🥊 *NEW APPLICATION — ALI Boxing Club*\n\n` +
+    `👤 Name: ${form.name || "-"}\n` +
+    `🎂 Age: ${form.age || "-"}\n` +
+    `📞 Phone: ${form.phone || "-"}\n` +
+    `🎯 Program: ${form.program}\n` +
+    `📈 Experience: ${form.experience}\n` +
+    `💬 Goal: ${form.goal || "-"}\n\n` +
+    `Sent from aliboxingclub.com`;
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.open(waLink(buildMsg()), "_blank", "noopener,noreferrer");
+  };
+
+  const input = "w-full border border-input bg-background px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[color:var(--gold)] transition-colors";
+
+  return (
+    <section id="apply" className="relative overflow-hidden border-y border-border bg-gradient-to-br from-[#25D366]/10 via-background to-primary/10 py-32">
+      <div className="pointer-events-none absolute -right-24 top-10 hidden opacity-10 lg:block">
+        <MessageCircle className="h-96 w-96 text-[#25D366]" />
+      </div>
+      <div className="relative mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-5">
+        <div className="reveal lg:col-span-2">
+          <div className="mb-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#25D366]">
+            <MessageCircle className="h-4 w-4" /> — Apply via WhatsApp
+          </div>
+          <h2 className="font-display text-5xl sm:text-6xl">One <span className="text-gradient-gold">Message</span><br />Away.</h2>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            Fill this out and we'll open WhatsApp with your application pre-filled. A coach replies within minutes during gym hours.
+          </p>
+          <ul className="mt-8 space-y-3 text-sm">
+            {[
+              "No account needed — just WhatsApp",
+              "Direct reply from a real coach",
+              "Free 60-minute trial class",
+              "Family & scholarship options available",
+            ].map((f) => (
+              <li key={f} className="flex items-start gap-3 text-muted-foreground">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#25D366]" /> {f}
+              </li>
+            ))}
+          </ul>
+          <a
+            href={waLink("Hi ALI Boxing Club! I'd like more info about training.")}
+            target="_blank" rel="noreferrer"
+            className="mt-8 inline-flex items-center gap-2 border border-[#25D366]/60 bg-[#25D366]/10 px-5 py-3 font-display text-sm uppercase tracking-widest text-[#25D366] transition-all hover:bg-[#25D366] hover:text-background"
+          >
+            <MessageCircle className="h-4 w-4" /> Chat with a Coach
+          </a>
+        </div>
+        <form onSubmit={onSubmit} className="reveal border border-border bg-card p-8 lg:col-span-3">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <input required placeholder="Full name" className={input} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <input required placeholder="Age" type="number" min={5} max={80} className={input} value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} />
+          </div>
+          <input required placeholder="Your phone (with country code)" className={`${input} mt-4`} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <select className={input} value={form.program} onChange={(e) => setForm({ ...form, program: e.target.value })}>
+              {["Kids Boxing", "Youth Boxing", "Women's Boxing", "Amateur / Competition", "Boxing Fitness", "Professional", "Private Coaching"].map((p) => (
+                <option key={p}>{p}</option>
+              ))}
+            </select>
+            <select className={input} value={form.experience} onChange={(e) => setForm({ ...form, experience: e.target.value })}>
+              {["Beginner", "Some experience", "Amateur", "Professional"].map((p) => <option key={p}>{p}</option>)}
+            </select>
+          </div>
+          <textarea rows={4} placeholder="What's your goal? (fitness, competition, self-defense…)" className={`${input} mt-4`} value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} />
+          <button type="submit" className="btn-fight btn-fight-hover mt-6 flex w-full items-center justify-center gap-2 animate-glow-pulse">
+            <MessageCircle className="h-4 w-4" /> Send Application via WhatsApp <Send className="h-4 w-4" />
+          </button>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Opens WhatsApp in a new tab. We reply personally within 24h.
+          </p>
+        </form>
+      </div>
+    </section>
+  );
+}
+
