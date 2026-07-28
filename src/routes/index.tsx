@@ -401,10 +401,20 @@ function Index() {
             </div>
             <div className="mt-6 flex flex-wrap gap-2">
               {[25, 50, 100, 250].map((v) => (
-                <button key={v} className="border border-border bg-background px-4 py-3 font-display text-lg transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]">${v}</button>
+                <a
+                  key={v}
+                  href={waLink(`Hi ALI Boxing Club — I'd like to donate $${v} to youth scholarships. Please share payment details.`)}
+                  target="_blank" rel="noreferrer"
+                  className="border border-border bg-background px-4 py-3 font-display text-lg transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]"
+                >${v}</a>
               ))}
-              <button className="btn-fight btn-fight-hover"><Heart className="h-4 w-4" /> Donate</button>
+              <a
+                href={waLink("Hi ALI Boxing Club — I want to donate to the youth scholarship fund. What are the ways to give?")}
+                target="_blank" rel="noreferrer"
+                className="btn-fight btn-fight-hover"
+              ><Heart className="h-4 w-4" /> Donate via WhatsApp</a>
             </div>
+
           </div>
         </div>
       </section>
