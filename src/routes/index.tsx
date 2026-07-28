@@ -85,9 +85,11 @@ function Stat({ value, suffix, label, icon: Icon }: { value: number; suffix?: st
 }
 
 function Index() {
+  useReveal();
   const navLinks = [
     ["About", "#about"], ["Programs", "#programs"], ["Coaches", "#coaches"],
-    ["Schedule", "#schedule"], ["Membership", "#membership"], ["Shop", "#shop"], ["Contact", "#contact"],
+    ["Stories", "#stories"], ["Gallery", "#gallery"],
+    ["Schedule", "#schedule"], ["Membership", "#membership"], ["Apply", "#apply"], ["Contact", "#contact"],
   ];
 
   return (
@@ -95,28 +97,37 @@ function Index() {
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <a href="#top" className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center bg-primary font-display text-lg font-bold text-primary-foreground">A</span>
+          <a href="#top" className="flex items-center gap-3">
+            <img src={logoImg} alt="ALI Boxing Club logo" width={40} height={40} className="h-10 w-10 object-contain drop-shadow-[0_2px_8px_rgba(220,38,38,0.4)]" />
             <span className="font-display text-lg tracking-wider">ALI <span className="text-[color:var(--gold)]">BOXING</span></span>
           </a>
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav className="hidden items-center gap-6 lg:flex">
             {navLinks.map(([l, h]) => (
-              <a key={h} href={h} className="text-sm uppercase tracking-widest text-muted-foreground transition-colors hover:text-[color:var(--gold)]">{l}</a>
+              <a key={h} href={h} className="text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-[color:var(--gold)]">{l}</a>
             ))}
           </nav>
-          <a href="#book" className="btn-fight btn-fight-hover text-sm">Join Now <ArrowRight className="h-4 w-4" /></a>
+          <a href="#apply" className="btn-fight btn-fight-hover text-sm">Join Now <ArrowRight className="h-4 w-4" /></a>
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO — with video placeholder */}
       <section id="top" className="relative min-h-screen overflow-hidden pt-16">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Boxer training at ALI Boxing Club" width={1920} height={1280} className="h-full w-full object-cover object-[70%_center] opacity-60" />
+          {/* Video placeholder — drop your training/fight reel at /hero.mp4 (public/) or update src */}
+          <video
+            className="h-full w-full object-cover opacity-60 animate-kenburns"
+            autoPlay muted loop playsInline
+            poster={heroImg}
+          >
+            {/* <source src="/hero.mp4" type="video/mp4" /> */}
+          </video>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+          {/* Faint punching bag silhouette placeholder */}
+          <div className="pointer-events-none absolute right-6 top-1/3 hidden h-64 w-24 animate-float-slow rounded-b-full bg-gradient-to-b from-primary/20 to-transparent blur-md lg:block" />
         </div>
         <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-2">
-          <div>
+          <div className="animate-reveal-up">
             <div className="mb-6 inline-flex items-center gap-2 border border-[color:var(--gold)]/40 bg-[color:var(--gold)]/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">
               <Flame className="h-3 w-3" /> Since 2014 · 120+ Medals
             </div>
@@ -127,8 +138,10 @@ function Index() {
               From your first jab to the world stage — ALI Boxing Club builds fighters. Kids, women, amateurs and pros welcome.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <a href="#book" className="btn-fight btn-fight-hover">🥊 Book a Free Class</a>
-              <a href="#membership" className="btn-ghost-gold btn-ghost-gold-hover">Become a Member</a>
+              <a href="#apply" className="btn-fight btn-fight-hover animate-glow-pulse">🥊 Join Now</a>
+              <a href="#book" className="btn-ghost-gold btn-ghost-gold-hover">📅 Book a Free Class</a>
+              <a href="#donate" className="btn-ghost-gold btn-ghost-gold-hover"><Heart className="h-4 w-4" /> Donate</a>
+              <a href="#membership" className="btn-ghost-gold btn-ghost-gold-hover"><Trophy className="h-4 w-4" /> Become a Member</a>
             </div>
             <div className="mt-12 flex items-center gap-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
               <div className="flex items-center gap-2"><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" /> 47 members training now</div>
@@ -136,9 +149,12 @@ function Index() {
           </div>
           <div className="relative hidden lg:block">
             <div className="absolute -right-10 top-1/2 -translate-y-1/2 rotate-90 font-display text-[10rem] font-bold tracking-tighter text-white/[0.03]">FIGHT</div>
+            {/* Floating logo mark */}
+            <img src={logoImg} alt="" aria-hidden className="mx-auto h-72 w-72 animate-float-slow object-contain opacity-90 drop-shadow-[0_20px_60px_rgba(220,38,38,0.35)]" />
           </div>
         </div>
       </section>
+
 
       {/* MARQUEE */}
       <div className="relative overflow-hidden border-y border-border bg-primary py-5">
