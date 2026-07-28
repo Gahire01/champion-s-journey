@@ -540,7 +540,11 @@ function Index() {
         </div>
       </section>
 
+      {/* APPLY — sends via WhatsApp */}
+      <ApplyWhatsApp />
+
       {/* BOOK + CONTACT */}
+
       <section id="book" className="mx-auto max-w-7xl px-6 py-32">
         <div className="grid gap-16 lg:grid-cols-2">
           <div id="contact">
