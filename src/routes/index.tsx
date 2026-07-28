@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Flame, Trophy, Users, Star, Calendar, MapPin, Phone, Mail,
   ArrowRight, Check, Heart, ShoppingBag, Play, Instagram, Facebook, Youtube,
+  MessageCircle, Image as ImageIcon, Video as VideoIcon, Quote, Send,
 } from "lucide-react";
 import heroImg from "@/assets/hero-boxer.jpg";
 import glovesImg from "@/assets/gloves.jpg";
@@ -12,8 +13,35 @@ import proImg from "@/assets/program-pro.jpg";
 import coach1 from "@/assets/coach-1.jpg";
 import coach2 from "@/assets/coach-2.jpg";
 import coach3 from "@/assets/coach-3.jpg";
+import logoImg from "@/assets/ali-logo.png";
+
+// TODO: replace with real WhatsApp number in international format (no + or spaces), e.g. "14155551234"
+const WHATSAPP_NUMBER = "0000000000";
+const waLink = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 export const Route = createFileRoute("/")({ component: Index });
+
+// Scroll reveal — adds .is-visible when the element enters the viewport
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 
 function useCounter(target: number, duration = 1600) {
   const [n, setN] = useState(0);
