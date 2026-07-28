@@ -644,3 +644,191 @@ function Countdown({ targetDays }: { targetDays: number }) {
     </div>
   );
 }
+
+/* -------------------- GALLERY -------------------- */
+function Gallery() {
+  const [tab, setTab] = useState<"photos" | "videos">("photos");
+  const [visible, setVisible] = useState(40);
+  const photos = Array.from({ length: 200 }, (_, i) => i + 1);
+  const videos = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  // Rotating gradient palette so 200 placeholders don't look identical
+  const palette = [
+    "from-primary/40 via-background to-[color:var(--gold)]/20",
+    "from-[color:var(--gold)]/30 via-background to-primary/30",
+    "from-primary/50 via-background to-background",
+    "from-background via-primary/20 to-[color:var(--gold)]/30",
+    "from-[color:var(--gold)]/20 via-card to-primary/40",
+    "from-primary/30 via-card to-background",
+  ];
+
+  return (
+    <section id="gallery" className="border-t border-border bg-background py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Gallery</div>
+            <h2 className="font-display text-5xl sm:text-6xl">Inside The <span className="text-gradient-gold">Gym</span>.</h2>
+            <p className="mt-3 max-w-lg text-muted-foreground">
+              200 fight moments · 12 highlight reels. Placeholders — swap them with your real photos & videos.
+            </p>
+          </div>
+          <div className="inline-flex border border-border">
+            <button
+              onClick={() => setTab("photos")}
+              className={`flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-widest transition-colors ${tab === "photos" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-[color:var(--gold)]"}`}
+            >
+              <ImageIcon className="h-4 w-4" /> Photos · 200
+            </button>
+            <button
+              onClick={() => setTab("videos")}
+              className={`flex items-center gap-2 border-l border-border px-5 py-2 text-xs uppercase tracking-widest transition-colors ${tab === "videos" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-[color:var(--gold)]"}`}
+            >
+              <VideoIcon className="h-4 w-4" /> Videos · 12
+            </button>
+          </div>
+        </div>
+
+        {tab === "photos" ? (
+          <>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {photos.slice(0, visible).map((n) => (
+                <figure
+                  key={n}
+                  className={`reveal group relative aspect-square overflow-hidden border border-border bg-gradient-to-br ${palette[n % palette.length]}`}
+                  style={{ transitionDelay: `${(n % 12) * 40}ms` }}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-60 transition-opacity group-hover:opacity-100">
+                    <ImageIcon className="h-6 w-6 text-[color:var(--gold)]/70" />
+                    <span className="mt-2 font-display text-xs uppercase tracking-widest text-muted-foreground">Photo {String(n).padStart(3, "0")}</span>
+                  </div>
+                  <div className="absolute inset-0 translate-y-full bg-background/70 backdrop-blur-sm transition-transform duration-300 group-hover:translate-y-0" />
+                  <div className="absolute inset-0 flex items-end justify-between p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="font-display text-lg text-[color:var(--gold)]">#{String(n).padStart(3, "0")}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Replace me</span>
+                  </div>
+                </figure>
+              ))}
+            </div>
+            {visible < photos.length && (
+              <div className="mt-10 text-center">
+                <button
+                  onClick={() => setVisible((v) => Math.min(v + 40, photos.length))}
+                  className="btn-ghost-gold btn-ghost-gold-hover"
+                >
+                  Load more ({photos.length - visible} left)
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {videos.map((n) => (
+              <figure
+                key={n}
+                className="reveal group relative aspect-video overflow-hidden border border-border bg-gradient-to-br from-primary/30 via-background to-[color:var(--gold)]/20"
+                style={{ transitionDelay: `${n * 60}ms` }}
+              >
+                <div className="absolute inset-0 shimmer-bg opacity-40" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="grid h-16 w-16 place-items-center rounded-full border border-[color:var(--gold)] bg-background/70 backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:border-primary">
+                    <Play className="h-6 w-6 translate-x-0.5 text-[color:var(--gold)] transition-colors group-hover:text-primary-foreground" />
+                  </div>
+                  <span className="mt-4 font-display text-lg uppercase tracking-widest">Video {String(n).padStart(2, "0")}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Drop your MP4 here</span>
+                </div>
+              </figure>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------- APPLY VIA WHATSAPP -------------------- */
+function ApplyWhatsApp() {
+  const [form, setForm] = useState({
+    name: "", age: "", phone: "", program: "Kids Boxing", experience: "Beginner", goal: "",
+  });
+
+  const buildMsg = () =>
+    `🥊 *NEW APPLICATION — ALI Boxing Club*\n\n` +
+    `👤 Name: ${form.name || "-"}\n` +
+    `🎂 Age: ${form.age || "-"}\n` +
+    `📞 Phone: ${form.phone || "-"}\n` +
+    `🎯 Program: ${form.program}\n` +
+    `📈 Experience: ${form.experience}\n` +
+    `💬 Goal: ${form.goal || "-"}\n\n` +
+    `Sent from aliboxingclub.com`;
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.open(waLink(buildMsg()), "_blank", "noopener,noreferrer");
+  };
+
+  const input = "w-full border border-input bg-background px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[color:var(--gold)] transition-colors";
+
+  return (
+    <section id="apply" className="relative overflow-hidden border-y border-border bg-gradient-to-br from-[#25D366]/10 via-background to-primary/10 py-32">
+      <div className="pointer-events-none absolute -right-24 top-10 hidden opacity-10 lg:block">
+        <MessageCircle className="h-96 w-96 text-[#25D366]" />
+      </div>
+      <div className="relative mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-5">
+        <div className="reveal lg:col-span-2">
+          <div className="mb-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#25D366]">
+            <MessageCircle className="h-4 w-4" /> — Apply via WhatsApp
+          </div>
+          <h2 className="font-display text-5xl sm:text-6xl">One <span className="text-gradient-gold">Message</span><br />Away.</h2>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            Fill this out and we'll open WhatsApp with your application pre-filled. A coach replies within minutes during gym hours.
+          </p>
+          <ul className="mt-8 space-y-3 text-sm">
+            {[
+              "No account needed — just WhatsApp",
+              "Direct reply from a real coach",
+              "Free 60-minute trial class",
+              "Family & scholarship options available",
+            ].map((f) => (
+              <li key={f} className="flex items-start gap-3 text-muted-foreground">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#25D366]" /> {f}
+              </li>
+            ))}
+          </ul>
+          <a
+            href={waLink("Hi ALI Boxing Club! I'd like more info about training.")}
+            target="_blank" rel="noreferrer"
+            className="mt-8 inline-flex items-center gap-2 border border-[#25D366]/60 bg-[#25D366]/10 px-5 py-3 font-display text-sm uppercase tracking-widest text-[#25D366] transition-all hover:bg-[#25D366] hover:text-background"
+          >
+            <MessageCircle className="h-4 w-4" /> Chat with a Coach
+          </a>
+        </div>
+        <form onSubmit={onSubmit} className="reveal border border-border bg-card p-8 lg:col-span-3">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <input required placeholder="Full name" className={input} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <input required placeholder="Age" type="number" min={5} max={80} className={input} value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} />
+          </div>
+          <input required placeholder="Your phone (with country code)" className={`${input} mt-4`} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <select className={input} value={form.program} onChange={(e) => setForm({ ...form, program: e.target.value })}>
+              {["Kids Boxing", "Youth Boxing", "Women's Boxing", "Amateur / Competition", "Boxing Fitness", "Professional", "Private Coaching"].map((p) => (
+                <option key={p}>{p}</option>
+              ))}
+            </select>
+            <select className={input} value={form.experience} onChange={(e) => setForm({ ...form, experience: e.target.value })}>
+              {["Beginner", "Some experience", "Amateur", "Professional"].map((p) => <option key={p}>{p}</option>)}
+            </select>
+          </div>
+          <textarea rows={4} placeholder="What's your goal? (fitness, competition, self-defense…)" className={`${input} mt-4`} value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} />
+          <button type="submit" className="btn-fight btn-fight-hover mt-6 flex w-full items-center justify-center gap-2 animate-glow-pulse">
+            <MessageCircle className="h-4 w-4" /> Send Application via WhatsApp <Send className="h-4 w-4" />
+          </button>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Opens WhatsApp in a new tab. We reply personally within 24h.
+          </p>
+        </form>
+      </div>
+    </section>
+  );
+}
+
