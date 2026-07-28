@@ -510,7 +510,11 @@ function Index() {
         </div>
       </section>
 
+      {/* GALLERY — 200 image placeholders + 12 video placeholders */}
+      <Gallery />
+
       {/* TESTIMONIALS */}
+
       <section className="border-t border-border bg-card/30 py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16">
