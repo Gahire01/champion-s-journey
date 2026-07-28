@@ -372,7 +372,8 @@ function Index() {
       </section>
 
       {/* EVENT + DONATE */}
-      <section className="border-y border-border bg-gradient-to-br from-primary/20 via-background to-background py-32">
+      <section id="donate" className="border-y border-border bg-gradient-to-br from-primary/20 via-background to-background py-32">
+
         <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2">
           <div>
             <div className="mb-4 text-xs uppercase tracking-[0.3em] text-[color:var(--gold)]">— Next Event</div>
