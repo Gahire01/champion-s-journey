@@ -6,7 +6,7 @@ import {
   ArrowRight, Check, Heart, ShoppingBag, Play, Instagram, Facebook, Youtube,
   Quote, Calendar, MessageCircle,
 } from "lucide-react";
-import logoImg from "@/assets/ali-logo.png";
+const logoImg = "/logo.jpg";
 import {
   heroImages, glovesImg, kidsImg, youthImg, womenImg,
   fitnessImg, proImg, amateurImg, coach1, coach2, coach3,
