@@ -835,6 +835,12 @@ function ApplyWhatsApp() {
           >
             <MessageCircle className="h-4 w-4" /> Chat with a Coach
           </a>
+          <a
+            href={COACH_TEL}
+            className="mt-3 ml-0 inline-flex items-center gap-2 border border-[color:var(--gold)]/60 bg-[color:var(--gold)]/10 px-5 py-3 font-display text-sm uppercase tracking-widest text-[color:var(--gold)] transition-all hover:bg-[color:var(--gold)] hover:text-background sm:ml-3"
+          >
+            <Phone className="h-4 w-4" /> Call {COACH_PHONE}
+          </a>
         </div>
         <form onSubmit={onSubmit} className="reveal border border-border bg-card p-8 lg:col-span-3">
           <div className="grid gap-4 sm:grid-cols-2">
