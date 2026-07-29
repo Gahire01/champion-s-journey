@@ -121,7 +121,8 @@ export default function Gallery() {
                     <img
                       src={src}
                       alt={`Gallery ${filename}`}
-                      loading="lazy"
+                      loading={i < 6 ? "eager" : "lazy"}
+                      fetchPriority={i < 6 ? "high" : undefined}
                       decoding="async"
                       onLoad={() => setLoadedImages((prev) => new Set(prev).add(src))}
                       onError={() => setErrored((prev) => new Set(prev).add(src))}

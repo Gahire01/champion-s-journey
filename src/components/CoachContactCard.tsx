@@ -39,7 +39,7 @@ export default function CoachContactCard() {
                 <div className="mb-3 inline-flex items-center gap-2 border border-[color:var(--gold)]/40 bg-[color:var(--gold)]/5 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">
                   <Flame className="h-3 w-3" /> Head Coach · On Duty
                 </div>
-                <h3 className="font-display text-4xl leading-tight">Coach Marcus <span className="text-gradient-gold">"Iron"</span> Johnson</h3>
+                <h3 className="font-display text-4xl leading-tight">Coach Ali <span className="text-gradient-gold">Semwaga</span></h3>
                 <p className="mt-3 text-sm text-muted-foreground">
                   22 years in the ring · Developed 8 Golden Gloves champions · Available 7 days a week.
                 </p>
