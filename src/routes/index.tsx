@@ -16,7 +16,10 @@ import coach3 from "@/assets/coach-3.jpg";
 import logoImg from "@/assets/ali-logo.png";
 
 // TODO: replace with real WhatsApp number in international format (no + or spaces), e.g. "14155551234"
-const WHATSAPP_NUMBER = "0000000000";
+const WHATSAPP_NUMBER = "250788750321";
+const COACH_PHONE = "+250788750321";
+const COACH_TEL = "tel:+250788750321";
+const MTN_MOMO_CODE = "*182*8*1*250788750321#";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
