@@ -16,7 +16,10 @@ import coach3 from "@/assets/coach-3.jpg";
 import logoImg from "@/assets/ali-logo.png";
 
 // TODO: replace with real WhatsApp number in international format (no + or spaces), e.g. "14155551234"
-const WHATSAPP_NUMBER = "0000000000";
+const WHATSAPP_NUMBER = "250788750321";
+const COACH_PHONE = "+250788750321";
+const COACH_TEL = "tel:+250788750321";
+const MTN_MOMO_CODE = "*182*8*1*250788750321#";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
@@ -472,7 +475,37 @@ function Index() {
                 target="_blank" rel="noreferrer"
                 className="btn-fight btn-fight-hover"
               ><Heart className="h-4 w-4" /> Donate via WhatsApp</a>
+              <a
+                href={COACH_TEL}
+                className="btn-ghost-gold btn-ghost-gold-hover"
+              ><Phone className="h-4 w-4" /> Call Coach {COACH_PHONE}</a>
             </div>
+
+            {/* MTN MoMo donation panel */}
+            <div className="mt-6 border border-[#FFCC00]/40 bg-[#FFCC00]/5 p-5">
+              <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#FFCC00]">
+                <span className="inline-flex h-5 items-center justify-center bg-[#FFCC00] px-2 text-[10px] font-bold text-black">MTN</span>
+                Mobile Money — Donate Instantly
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Send directly to Coach via MTN MoMo. Dial the USSD code or use the number below.
+              </p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <div className="border border-border bg-background px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">MoMo Number</div>
+                  <div className="font-display text-lg text-[color:var(--gold)]">0788 750 321</div>
+                </div>
+                <div className="border border-border bg-background px-4 py-3">
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">USSD Shortcut</div>
+                  <div className="font-display text-lg text-[color:var(--gold)]">*182*1*1*0788750321#</div>
+                </div>
+              </div>
+              <a
+                href={`ussd:${encodeURIComponent("*182*1*1*0788750321#")}`}
+                className="mt-3 inline-flex items-center gap-2 border border-[#FFCC00]/60 bg-[#FFCC00]/10 px-4 py-2 text-xs uppercase tracking-widest text-[#FFCC00] transition-colors hover:bg-[#FFCC00] hover:text-black"
+              >Open MoMo dialer</a>
+            </div>
+
 
           </div>
         </div>
@@ -801,6 +834,12 @@ function ApplyWhatsApp() {
             className="mt-8 inline-flex items-center gap-2 border border-[#25D366]/60 bg-[#25D366]/10 px-5 py-3 font-display text-sm uppercase tracking-widest text-[#25D366] transition-all hover:bg-[#25D366] hover:text-background"
           >
             <MessageCircle className="h-4 w-4" /> Chat with a Coach
+          </a>
+          <a
+            href={COACH_TEL}
+            className="mt-3 ml-0 inline-flex items-center gap-2 border border-[color:var(--gold)]/60 bg-[color:var(--gold)]/10 px-5 py-3 font-display text-sm uppercase tracking-widest text-[color:var(--gold)] transition-all hover:bg-[color:var(--gold)] hover:text-background sm:ml-3"
+          >
+            <Phone className="h-4 w-4" /> Call {COACH_PHONE}
           </a>
         </div>
         <form onSubmit={onSubmit} className="reveal border border-border bg-card p-8 lg:col-span-3">
