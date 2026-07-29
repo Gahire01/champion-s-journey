@@ -575,6 +575,9 @@ function Index() {
         </div>
       </section>
 
+      {/* COACH CONTACT CARD */}
+      <CoachContactCard />
+
       {/* APPLY — sends via WhatsApp */}
       <ApplyWhatsApp />
 
