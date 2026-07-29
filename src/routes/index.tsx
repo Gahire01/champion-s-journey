@@ -122,7 +122,9 @@ function Index() {
             autoPlay muted loop playsInline
             poster={heroImg}
           >
-            {/* <source src="/hero.mp4" type="video/mp4" /> */}
+            {/* Drop your reel at public/hero.mp4 to replace the sample */}
+            <source src="/hero.mp4" type="video/mp4" />
+            <source src="https://cdn.coverr.co/videos/coverr-boxing-training-1584/1080p.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
