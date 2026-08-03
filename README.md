@@ -13,9 +13,17 @@ npm i
 npm run dev
 ```
 
+## Production
+
+```sh
+npm run build
+npm run start
+```
+
 ## Built with
 
-- TanStack Start
+- Next.js (App Router)
 - TypeScript
 - React
 - Tailwind CSS
+- Lucide Icons

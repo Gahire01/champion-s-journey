@@ -1,0 +1,53 @@
+{
+  "name": "ALI Boxing Club — Train Like a Champion",
+  "short_name": "ALI Boxing",
+  "description": "Elite boxing training for kids, women, amateurs and pros. Join ALI Boxing Club — 10+ years, 120+ medals, certified coaches.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "categories": ["sports", "fitness", "education"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Apply to Join",
+      "short_name": "Apply",
+      "description": "Apply to join ALI Boxing Club",
+      "url": "/#apply"
+    },
+    {
+      "name": "Book a Free Class",
+      "short_name": "Book",
+      "description": "Book your free first class",
+      "url": "/#book"
+    },
+    {
+      "name": "Weekly Schedule",
+      "short_name": "Schedule",
+      "description": "This week's training rounds",
+      "url": "/#schedule"
+    }
+  ]
+}

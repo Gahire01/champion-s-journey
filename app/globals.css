@@ -1,0 +1,197 @@
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components";
+@source "../hooks";
+@source "../lib";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-blood: var(--blood);
+  --font-display: var(--font-oswald), "Oswald", "Impact", sans-serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.14 0.005 0);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.18 0.006 0);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.18 0.006 0);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.55 0.22 25);
+  --primary-foreground: oklch(0.98 0 0);
+  --blood: oklch(0.55 0.22 25);
+  --gold: oklch(0.78 0.13 85);
+  --secondary: oklch(0.22 0.006 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.22 0.006 0);
+  --muted-foreground: oklch(0.65 0.01 0);
+  --accent: oklch(0.78 0.13 85);
+  --accent-foreground: oklch(0.14 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.55 0.22 25);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  ::selection {
+    background: var(--gold);
+    color: var(--background);
+  }
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(135deg, oklch(0.88 0.14 90), oklch(0.65 0.14 70));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility btn-fight {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  background: var(--blood);
+  color: white;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+@utility btn-fight-hover {
+  &:hover {
+    background: oklch(0.6 0.24 25);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px -12px var(--blood);
+  }
+}
+@utility btn-ghost-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  transition: all .2s ease;
+}
+@utility btn-ghost-gold-hover {
+  &:hover {
+    background: var(--gold);
+    color: var(--background);
+  }
+}
+
+@utility diag-slice {
+  clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@utility animate-ticker { animation: ticker 40s linear infinite; }
+
+@keyframes punch {
+  0%,100% { transform: translate(0,0) rotate(0); }
+  50% { transform: translate(6px,-4px) rotate(3deg); }
+}
+@utility animate-punch { animation: punch 1.6s ease-in-out infinite; }
+
+@keyframes float-slow {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@utility animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+
+@keyframes kenburns {
+  0% { transform: scale(1) translate(0,0); }
+  100% { transform: scale(1.15) translate(-2%, -2%); }
+}
+@utility animate-kenburns { animation: kenburns 18s ease-out infinite alternate; }
+
+@keyframes reveal-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@utility animate-reveal-up { animation: reveal-up 0.9s cubic-bezier(.2,.7,.2,1) both; }
+
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--blood) 60%, transparent); }
+  50%     { box-shadow: 0 0 40px 8px color-mix(in oklab, var(--blood) 40%, transparent); }
+}
+@utility animate-glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@utility shimmer-bg {
+  background: linear-gradient(90deg,
+    color-mix(in oklab, var(--card) 90%, transparent) 0%,
+    color-mix(in oklab, var(--gold) 15%, var(--card)) 50%,
+    color-mix(in oklab, var(--card) 90%, transparent) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Reveal-on-scroll: apply .reveal, add .is-visible via IntersectionObserver */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+  .animate-kenburns, .animate-ticker, .animate-float-slow, .animate-glow-pulse, .shimmer-bg, .animate-punch, .animate-reveal-up { animation: none !important; }
+}
