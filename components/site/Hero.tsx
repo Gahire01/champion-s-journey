@@ -23,22 +23,26 @@ export default function Hero() {
     <section id="top" className="relative min-h-screen overflow-hidden pt-16">
       <div className="absolute inset-0">
         <div className="absolute inset-0">
-          <Image
-            key={previous}
-            src={previous}
-            alt=""
-            aria-hidden
-            sizes="100vw"
-            className="absolute inset-0 h-full w-full object-cover opacity-0 animate-kenburns transition-opacity duration-1000"
-          />
+          {idx.prev !== idx.cur && (
+            <Image
+              key={previous}
+              src={previous}
+              alt=""
+              aria-hidden
+              fill
+              sizes="100vw"
+              className="object-cover opacity-0 animate-kenburns transition-opacity duration-1000"
+            />
+          )}
           <Image
             key={current}
             src={current}
             alt=""
             aria-hidden
             priority
+            fill
             sizes="100vw"
-            className="absolute inset-0 h-full w-full object-cover opacity-60 animate-kenburns transition-opacity duration-1000"
+            className="object-cover opacity-60 animate-kenburns transition-opacity duration-1000"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
@@ -47,7 +51,7 @@ export default function Hero() {
       <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-2">
         <div className="animate-reveal-up">
           <div className="mb-6 inline-flex items-center gap-2 border border-[color:var(--gold)]/40 bg-[color:var(--gold)]/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[color:var(--gold)]">
-            <Flame className="h-3 w-3" /> Since 2014 · 120+ Medals
+            <Flame className="h-3 w-3" /> Kigali · Rwanda — IBA Certified Coaches
           </div>
           <h1 className="font-display text-6xl font-bold leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
             Train Like
@@ -88,8 +92,9 @@ export default function Hero() {
               src={current}
               alt=""
               aria-hidden
+              fill
               sizes="20rem"
-              className="absolute inset-0 h-full w-full animate-float-slow rounded-2xl object-cover opacity-90 drop-shadow-[0_20px_60px_rgba(220,38,38,0.35)]"
+              className="animate-float-slow rounded-2xl object-cover opacity-90 drop-shadow-[0_20px_60px_rgba(220,38,38,0.35)]"
             />
           </div>
         </div>

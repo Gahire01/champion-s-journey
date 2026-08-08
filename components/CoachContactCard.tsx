@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Phone, MessageCircle, MapPin, ArrowRight, Flame } from "lucide-react";
-import { coach1 } from "@/lib/images";
+import { coachAli } from "@/lib/images";
 import { waLink, COACH_PHONE, COACH_TEL } from "@/lib/site";
 
 const items = [
@@ -44,14 +44,14 @@ export default function CoachContactCard() {
                   Coach Ali <span className="text-gradient-gold">Semwaga</span>
                 </h3>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  22 years in the ring · Developed 8 Golden Gloves champions · Available 7 days a
-                  week.
+                  Owner & Head Coach of ALI Boxing Club. IBA 1 Star certified coach, available to
+                  talk about training, schedule and membership.
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <Image
-                  src={coach1}
-                  alt="Head Coach"
+                  src={coachAli}
+                  alt="Head Coach Ali Semwaga"
                   width={80}
                   height={80}
                   className="h-20 w-20 rounded-full border-2 border-[color:var(--gold)] object-cover"
@@ -59,7 +59,7 @@ export default function CoachContactCard() {
                 <div className="flex-1">
                   <div className="flex gap-1 text-[color:var(--gold)]">★</div>
                   <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">
-                    Trusted by 400+ fighters
+                    IBA 1 Star Coach · ALI Boxing Club
                   </div>
                 </div>
               </div>

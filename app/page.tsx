@@ -11,6 +11,7 @@ import Schedule from "@/components/site/Schedule";
 import Membership from "@/components/site/Membership";
 import EventDonate from "@/components/site/EventDonate";
 import Gallery from "@/components/Gallery";
+import Videos from "@/components/site/Videos";
 import Comments from "@/components/site/Comments";
 import Testimonials from "@/components/site/Testimonials";
 import CoachContactCard from "@/components/CoachContactCard";
@@ -38,6 +39,7 @@ export default function Home() {
         <Membership />
         <EventDonate />
         <Gallery />
+        <Videos />
         <Comments />
         <Testimonials />
         <CoachContactCard />

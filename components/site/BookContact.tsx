@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Calendar, Mail, MapPin, Phone } from "lucide-react";
-import { Instagram, Facebook, Youtube } from "lucide-react";
-import { waLink } from "@/lib/site";
+import { ArrowRight, Calendar, MapPin, MessageCircle, Phone } from "lucide-react";
+import { waLink, COACH_PHONE, COACH_TEL } from "@/lib/site";
 
 export default function BookContact() {
   const [form, setForm] = useState({
@@ -42,29 +41,26 @@ export default function BookContact() {
           </p>
           <div className="mt-10 space-y-5 text-sm">
             <div className="flex items-center gap-4">
-              <MapPin className="h-5 w-5 text-[color:var(--gold)]" /> 1420 Champion Way, Boston, MA
-              02118
+              <MapPin className="h-5 w-5 text-[color:var(--gold)]" /> ALI Boxing Club — Kigali,
+              Rwanda
             </div>
-            <div className="flex items-center gap-4">
-              <Phone className="h-5 w-5 text-[color:var(--gold)]" /> (617) 555-JABS
-            </div>
-            <div className="flex items-center gap-4">
-              <Mail className="h-5 w-5 text-[color:var(--gold)]" /> hello@aliboxingclub.com
-            </div>
+            <a
+              href={COACH_TEL}
+              className="flex items-center gap-4 text-foreground transition-colors hover:text-[color:var(--gold)]"
+            >
+              <Phone className="h-5 w-5 text-[color:var(--gold)]" /> {COACH_PHONE}
+            </a>
+            <a
+              href={waLink("Hello Coach, I'd like to book a class at ALI Boxing Club.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 text-foreground transition-colors hover:text-[color:var(--gold)]"
+            >
+              <MessageCircle className="h-5 w-5 text-[color:var(--gold)]" /> Message us on WhatsApp
+            </a>
             <div className="flex items-center gap-4">
               <Calendar className="h-5 w-5 text-[color:var(--gold)]" /> Mon–Sat · 6AM – 10PM
             </div>
-          </div>
-          <div className="mt-8 flex gap-3">
-            {[Instagram, Facebook, Youtube].map((I, i) => (
-              <a
-                key={i}
-                href="#"
-                className="grid h-10 w-10 place-items-center border border-border transition-colors hover:border-[color:var(--gold)] hover:text-[color:var(--gold)]"
-              >
-                <I className="h-4 w-4" />
-              </a>
-            ))}
           </div>
         </div>
         <form className="border border-border bg-card p-8" onSubmit={onSubmit}>

@@ -3,12 +3,12 @@ import { ArrowRight } from "lucide-react";
 import { kidsImg, womenImg, proImg, youthImg, fitnessImg, amateurImg } from "@/lib/images";
 
 const programs = [
-  { img: kidsImg, title: "Kids Boxing", age: "Ages 6–12", fee: "$79/mo", coach: "Coach Marcus", schedule: "Mon · Wed · Fri · 5PM" },
-  { img: womenImg, title: "Women's Boxing", age: "All Levels", fee: "$99/mo", coach: "Coach Elena", schedule: "Tue · Thu · Sat · 6PM" },
-  { img: proImg, title: "Professional", age: "By invitation", fee: "Custom", coach: "Coach Diego", schedule: "Daily · 7AM & 6PM" },
-  { img: youthImg, title: "Youth Boxing", age: "Ages 13–17", fee: "$89/mo", coach: "Coach Marcus", schedule: "Mon · Wed · Fri · 6PM" },
-  { img: fitnessImg, title: "Boxing Fitness", age: "All Levels", fee: "$69/mo", coach: "Coach Elena", schedule: "Daily · 12PM" },
-  { img: amateurImg, title: "Amateur / Competition", age: "16+", fee: "$149/mo", coach: "Coach Diego", schedule: "Tue · Thu · Sat · 7PM" },
+  { img: kidsImg, title: "Kids Boxing", age: "Ages 6–12" },
+  { img: womenImg, title: "Women's Boxing", age: "All Levels" },
+  { img: proImg, title: "Professional", age: "By invitation" },
+  { img: youthImg, title: "Youth Boxing", age: "Ages 13–17" },
+  { img: fitnessImg, title: "Boxing Fitness", age: "All Levels" },
+  { img: amateurImg, title: "Amateur / Competition", age: "16+" },
 ];
 
 const imgSizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw";
@@ -27,7 +27,7 @@ export default function Programs() {
             </h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            Seven programs built for every level — from a 6-year-old&apos;s first jab to a pro&apos;s title
+            Six programs built for every level — from a 6-year-old&apos;s first jab to a pro&apos;s title
             camp.
           </p>
         </div>
@@ -52,11 +52,9 @@ export default function Programs() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-6">
                   <h3 className="font-display text-3xl">{p.title}</h3>
-                  <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase tracking-widest text-muted-foreground">
-                    <span>{p.coach}</span>
-                    <span className="text-[color:var(--gold)]">{p.fee}</span>
+                  <div className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">
+                    {p.age}
                   </div>
-                  <div className="mt-1 text-xs text-muted-foreground">{p.schedule}</div>
                 </div>
               </div>
               <a

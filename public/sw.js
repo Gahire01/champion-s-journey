@@ -2,11 +2,17 @@
  * Cache-first for the app shell + images, network-first for navigation
  * so the site keeps working offline and the 270+ photo gallery loads instantly.
  */
-const VERSION = "ali-boxing-v1";
+const VERSION = "ali-boxing-v2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const IMAGE_CACHE = `${VERSION}-images`;
 
-const SHELL = ["/", "/logo.jpg", "/manifest.webmanifest", "/favicon.ico"];
+const SHELL = [
+  "/",
+  "/logo.jpg",
+  "/favicon.ico",
+  "/apple-touch-icon.png",
+  "/manifest.webmanifest",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -59,6 +65,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/IMG-") ||
     url.pathname === "/logo.jpg" ||
     url.pathname.startsWith("/icon-") ||
+    url.pathname.startsWith("/apple-touch-icon") ||
     url.pathname.startsWith("/favicon.") ||
     url.pathname.startsWith("/_next/image") ||
     url.pathname.startsWith("/_next/static");

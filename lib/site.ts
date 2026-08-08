@@ -7,9 +7,9 @@ export const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 export const siteContact = {
-  address: "1420 Champion Way, Boston, MA 02118",
-  phoneDisplay: "(617) 555-JABS",
-  email: "hello@aliboxingclub.com",
+  address: "ALI Boxing Club — Kigali, Rwanda",
+  phoneDisplay: COACH_PHONE,
+  email: "",
   hours: "Mon–Sat · 6AM – 10PM",
 };
 
@@ -18,6 +18,7 @@ export const navLinks: [string, string][] = [
   ["Programs", "#programs"],
   ["Coaches", "#coaches"],
   ["Fighters", "#fighters"],
+  ["Videos", "#videos"],
   ["Team", "#team"],
   ["Stories", "#stories"],
   ["Gallery", "#gallery"],

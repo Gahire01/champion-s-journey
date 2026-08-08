@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://aliboxingclub.com"),
   title: "ALI Boxing Club — Train Like a Champion",
   description:
-    "Elite boxing training for kids, women, amateurs and pros. Join ALI Boxing Club — 10+ years, 120+ medals, certified coaches.",
+    "Elite boxing training for kids, women, amateurs and pros. Join ALI Boxing Club — certified coaches, a real fight team and a community that trains like champions.",
   applicationName: "ALI Boxing Club",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -29,9 +29,12 @@ export const metadata: Metadata = {
     title: "ALI Boxing Club",
   },
   icons: {
-    icon: "/logo.jpg",
+    icon: [
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
     shortcut: "/favicon.ico",
-    apple: "/logo.jpg",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "ALI Boxing Club — Train Like a Champion",
